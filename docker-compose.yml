@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+
+  api:
+    image: hashicorp/http-echo:latest
+    container_name: api
+    restart: unless-stopped
+    command:
+      - "-text=Hello from SteuerNext API"
+    ports:
+      - "8080:5678"
+
+  db:
+    image: postgres:17
+    container_name: db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: steuernext
+      POSTGRES_USER: steuernext
+      POSTGRES_PASSWORD: steuernext
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
